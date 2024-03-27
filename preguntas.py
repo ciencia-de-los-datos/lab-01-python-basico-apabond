@@ -228,10 +228,10 @@ def pregunta_07():
             dictionary[numero].append(letra)
     
     
-    resultado = sorted([(numero, letras) for numero, letras in dictionary.items()])
+    resultado = sorted([(int(numero), letras) for numero, letras in dictionary.items()])
 
     return resultado
-    
+  
 
 
 def pregunta_08():
@@ -269,7 +269,7 @@ def pregunta_08():
         newlist = sorted(set(letras))
         dictionary[numero] = newlist
 
-    resultado = sorted([(numero, letras) for numero, letras in dictionary.items()])
+    resultado = sorted([(int(numero), letras) for numero, letras in dictionary.items()])
 
     return resultado
     
@@ -407,5 +407,6 @@ def pregunta_12():
     
     return resultado
     
+
 
     
