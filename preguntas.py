@@ -11,6 +11,12 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
+data = open("data.csv", "r").readlines()
+
+data = [x.replace("\n", "") for x in data]
+data = [x.replace("\t", ",") for x in data]
+data =  [x.split(",") for x in data]
+
 
 
 def pregunta_01():
@@ -21,7 +27,11 @@ def pregunta_01():
     214
 
     """
-    return
+   
+    lista = list([x[1] for x in data])
+    lista = sum([int(x) for x in lista])
+    return lista
+
 
 
 def pregunta_02():
@@ -39,7 +49,10 @@ def pregunta_02():
     ]
 
     """
-    return
+    lista = list([x[0] for x in data])
+    from collections import Counter
+    lista = sorted(list(Counter(lista).items()))
+    return lista
 
 
 def pregunta_03():
@@ -57,7 +70,21 @@ def pregunta_03():
     ]
 
     """
-    return
+    from collections import defaultdict
+
+    lista = [(x[0], x[1]) for x in data]
+
+    sumas = defaultdict(int)
+    for letra, numero in lista:
+        sumas[letra] += int(numero)
+
+
+    tuplas_suma = sorted([(letra, suma) for letra, suma in sumas.items()])
+
+
+    return(tuplas_suma)
+        
+
 
 
 def pregunta_04():
@@ -82,7 +109,11 @@ def pregunta_04():
     ]
 
     """
-    return
+    list1 = [x[2].split("-") for x in data]
+    from collections import Counter
+    list2 = sorted(list(Counter([x[1] for x in list1]).items()))
+    
+    return list2
 
 
 def pregunta_05():
@@ -100,7 +131,22 @@ def pregunta_05():
     ]
 
     """
-    return
+    
+    from collections import defaultdict
+
+    lista = [(x[0], x[1]) for x in data]
+    # Diccionario para almacenar los números mínimo y máximo por cada letra
+    dictionary = defaultdict(lambda: [float('-inf'), float('inf')])
+
+    # Calcular el número mínimo y máximo para cada letra
+    for letra, numero in lista:
+        num = int(numero)
+        dictionary[letra][0] = max(dictionary[letra][0], num) # máximo
+        dictionary[letra][1] = min(dictionary[letra][1], num) # mínimo
+
+
+    tuplas_min_max = sorted([(letra, min_max[0], min_max[1]) for letra, min_max in dictionary.items()])
+    return tuplas_min_max
 
 
 def pregunta_06():
@@ -125,7 +171,30 @@ def pregunta_06():
     ]
 
     """
-    return
+    columna5 = []
+
+    # Iterar sobre cada lista y extraer los elementos que contienen ":"
+    for sublista in data:
+        for elemento in sublista:
+            if ":" in elemento:
+                columna5.append(elemento)
+
+    componentes = {}
+
+
+    for componente in columna5:
+        letra, numero = componente.split(':')
+        numero = int(numero)
+        if letra not in componentes:
+            componentes[letra] = [numero]
+        else:
+            componentes[letra].append(numero)
+
+    # Calcular el mínimo y el máximo por cada clave
+    resultados = sorted([(letra, min(numeros), max(numeros)) for letra, numeros in componentes.items()])
+
+    return resultados
+
 
 
 def pregunta_07():
@@ -149,7 +218,20 @@ def pregunta_07():
     ]
 
     """
-    return
+    lista = [(x[0], x[1]) for x in data]
+    dictionary = {}
+
+    for letra, numero in lista:
+        if numero not in dictionary:
+            dictionary[numero] = [letra]
+        else:
+            dictionary[numero].append(letra)
+    
+    
+    resultado = sorted([(numero, letras) for numero, letras in dictionary.items()])
+
+    return resultado
+    
 
 
 def pregunta_08():
@@ -174,7 +256,23 @@ def pregunta_08():
     ]
 
     """
-    return
+    lista = [(x[0], x[1]) for x in data]
+    dictionary = {}
+
+    for letra, numero in lista:
+        if numero not in dictionary:
+            dictionary[numero] = [letra]
+        else:
+            dictionary[numero].append(letra)
+    
+    for numero, letras in dictionary.items():
+        newlist = sorted(set(letras))
+        dictionary[numero] = newlist
+
+    resultado = sorted([(numero, letras) for numero, letras in dictionary.items()])
+
+    return resultado
+    
 
 
 def pregunta_09():
@@ -197,8 +295,25 @@ def pregunta_09():
     }
 
     """
-    return
+    from collections import Counter
 
+    columna5 = []
+    for sublista in data:
+        for elemento in sublista:
+            if ":" in elemento:
+                columna5.append(elemento)
+
+     
+    claves = sorted([componente.split(':')[0] for componente in columna5])
+    conteo_claves = Counter(claves)
+
+    diccionario_conteo = dict(conteo_claves)
+
+    return diccionario_conteo
+   
+data2 = open("data.csv", "r").readlines()
+data2 = [x.replace("\n", "") for x in data2]
+data2= [x.split("\t") for x in data2]
 
 def pregunta_10():
     """
@@ -218,8 +333,8 @@ def pregunta_10():
 
 
     """
-    return
-
+    resultado = [(x[0], len(x[3].split(",")), len(x[4].split(","))) for x in data2]
+    return resultado
 
 def pregunta_11():
     """
@@ -239,7 +354,24 @@ def pregunta_11():
 
 
     """
-    return
+    from collections import Counter
+
+    lista = [(x[1], x[3].split(",")) for x in data2]
+    l=[]
+    for tupla in lista:
+        for letra in tupla[1]:
+            l.append((letra, int(tupla[0])))
+
+
+    resultado = {}
+
+    for key, value in sorted(l):
+        if key in resultado:
+            resultado[key] += value
+        else:
+            resultado[key] = value
+    
+    return resultado
 
 
 def pregunta_12():
@@ -257,4 +389,23 @@ def pregunta_12():
     }
 
     """
-    return
+    lista= [(x[0], x[4].split(",")) for x in data2]
+    l=[]
+
+    for elemento in lista:
+        for letra in elemento[1]:
+            _, numero = letra.split(':')
+            l.append((elemento[0], int(numero)))
+
+    resultado = {}
+
+    for key, value in sorted(l):
+        if key in resultado:
+            resultado[key] += value
+        else:
+            resultado[key] = value
+    
+    return resultado
+    
+
+    
